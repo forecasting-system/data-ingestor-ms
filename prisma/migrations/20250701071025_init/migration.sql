@@ -1,0 +1,9 @@
+-- CreateTable
+CREATE TABLE "Sales" (
+    "id" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "value" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Sales_pkey" PRIMARY KEY ("id")
+);

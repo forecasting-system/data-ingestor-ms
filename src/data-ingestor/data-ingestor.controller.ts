@@ -1,6 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { DataIngestorService } from './data-ingestor.service';
 import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { SalesDataEntryDto } from 'src/dto/salesDataEntry.dto';
+import { SalesDataEntry } from 'src/models/salesData.model';
 
 @Controller()
 export class DataIngestorController {
@@ -12,9 +14,12 @@ export class DataIngestorController {
   }
 
   @EventPattern('external.sales.created')
-  // TODO: data DTO
-  handleSalesCreated(@Payload() data: any) {
-    console.log('Sales created received', data);
-    return this.dataIngestorService.saveSalesData(data);
+  handleSalesCreated(@Payload() salesDataEntryDto: SalesDataEntryDto) {
+    const salesDataEntry = new SalesDataEntry(
+      salesDataEntryDto.date,
+      salesDataEntryDto.value,
+    );
+
+    return this.dataIngestorService.saveSalesData(salesDataEntry);
   }
 }

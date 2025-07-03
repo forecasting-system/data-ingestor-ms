@@ -22,7 +22,11 @@ export class SqlSalesRepository
   }
 
   async getSalesData(): Promise<SalesData> {
-    const salesData = await this.sales.findMany();
+    const salesData = await this.sales.findMany({
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
     const sales = new SalesData(salesData);
     return sales;
   }

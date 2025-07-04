@@ -1,4 +1,9 @@
-import { Controller, Inject, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Inject,
+  Logger,
+} from '@nestjs/common';
 import { DataIngestorService } from './data-ingestor.service';
 import {
   ClientProxy,
@@ -29,6 +34,12 @@ export class DataIngestorController {
   @EventPattern('external.sales.created')
   handleSalesCreated(@Payload() salesDataEntryDto: SalesDataEntryDto) {
     this.logger.log('Triggers on external.sales.created');
+
+    // if (salesDataEntryDto.date.getDate() !== 1) {
+    //   throw new BadRequestException(
+    //     'Invalida data. Sales data is not the first day of the month',
+    //   );
+    // }
     const salesDataEntry = new SalesDataEntry(
       salesDataEntryDto.date,
       salesDataEntryDto.value,

@@ -22,11 +22,13 @@ export class DataIngestorController {
   @MessagePattern('getSalesData')
   async handleDataIngestion() {
     const salesData = await this.dataIngestorService.getSalesData();
+    this.logger.log('Sales data retrieved');
     return salesData;
   }
 
   @EventPattern('external.sales.created')
   handleSalesCreated(@Payload() salesDataEntryDto: SalesDataEntryDto) {
+    this.logger.log('Triggers on external.sales.created');
     const salesDataEntry = new SalesDataEntry(
       salesDataEntryDto.date,
       salesDataEntryDto.value,
@@ -34,6 +36,6 @@ export class DataIngestorController {
 
     this.dataIngestorService.saveSalesData(salesDataEntry);
     this.client.emit('internal.sales.persisted', salesDataEntry);
-    this.logger.log('Sales data persisted');
+    this.logger.log('Sales data persisted emitted');
   }
 }
